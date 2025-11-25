@@ -34,7 +34,7 @@ const Login = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl px-8 bg-white">
+    <form onSubmit={handleSubmit} className="sm:w-[350px] w-full text-center border border-gray-300/60 rounded-2xl mx-10 sm:mx-16 md:mx-0 px-8 bg-white">
       <h1 className="text-purple-700 text-3xl mt-10 font-medium">{state === "login" ? "Login" : "Sign up"}</h1>
       <p className="text-gray-500 text-sm mt-2">Please sign in to continue</p>
       {state !== "login" && (

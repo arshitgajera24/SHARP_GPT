@@ -25,7 +25,9 @@ const Message = ({message}) => {
           <div className='inline-flex flex-col gap-2 p-2 px-2 max-w-2xl bg-primary/20 dark:bg-[#57317C]/30 border border-[#80609F]/30 rounded-xl rounded-tl-none my-4'>
             {
               message.isImage ? (
-                <img src={message.content} className='w-full max-w-md mt-2 rounded-md' alt="" />
+                <a href={message.content}>
+                  <img src={message.content} className='w-full max-w-md mt-2 rounded-md' alt="" />
+                </a>
               ) : (
                 <div className='text-sm dark:text-primary reset-tw'>
                   <Markdown>{message.content}</Markdown>

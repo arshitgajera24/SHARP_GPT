@@ -7,6 +7,6 @@ const userRoutes = Router();
 userRoutes.route("/register").post(userControllers.registerUser);
 userRoutes.route("/login").post(userControllers.loginUser);
 userRoutes.route("/data").get(protect, userControllers.getUser);
-userRoutes.route("/published-images").get(protect, userControllers.getPublishedImages);
+userRoutes.route("/published-images").get(userControllers.getPublishedImages);
 
 export default userRoutes;

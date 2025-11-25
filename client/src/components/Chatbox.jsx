@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useAppContext } from '../context/AppContext'
 import { assets } from '../assets/assets.js';
 import Message from './Message.jsx';
+import toast from 'react-hot-toast';
 
 const Chatbox = () => {
 
-  const {selectedChat, theme} = useAppContext();
+  const {selectedChat, theme, user, axios, config, setUser} = useAppContext();
 
   const containerRef = useRef(null);
 
@@ -17,7 +18,40 @@ const Chatbox = () => {
   const [isPublished, setIsPublished] = useState(false);
 
   const onSubmitHandler = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      if(!user) return toast("Login to Send Message");
+
+      setLoading(true);
+      const promptCopy = prompt;
+      setPrompt("");
+      setMessages(prev => [...prev, { role: "user", content: prompt, timestamp: Date.now(), isImage: false, }])
+
+      const {data} = await axios.post(`/api/message/${mode}`, {chatId: selectedChat._id, prompt, isPublished}, config)
+
+      if(data.success)
+      {
+        setMessages(prev => [...prev, data.reply]);
+        if(mode === "image")
+        {
+          setUser(prev => ({...prev, credits: prev.credits - 2}))
+        }
+        else
+        {
+          setUser(prev => ({...prev, credits: prev.credits - 1}))
+        }
+      }
+      else
+      {
+        toast.error(data.message);
+        setPrompt(promptCopy);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setPrompt("")
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -75,7 +109,7 @@ const Chatbox = () => {
 
       {/* Prompt Input Box */}
       <form onSubmit={onSubmitHandler} className='bg-primary/20 dark:bg-[#583C79]/30 border border-primary dark:border-[#80609F]/30 rounded-full w-full max-w-2xl p-3 pl-4 mx-auto flex gap-4 items-center'>
-        <select onChange={(e) => setMode(e.target.value)} value={mode} className='text-sm pl-3 pr-2 outline-none'>
+        <select onChange={(e) => setMode(e.target.value)} value={mode} className='text-sm pl-3 pr-2 outline-none cursor-pointer'>
           <option className='dark:bg-purple-900' value="text">Text</option>
           <option className='dark:bg-purple-900' value="image">Image</option>
         </select>

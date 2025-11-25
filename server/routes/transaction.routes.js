@@ -4,7 +4,7 @@ import * as transactionControllers from "../controllers/transaction.controller.j
 
 const transactionRoutes = Router();
 
-transactionRoutes.route("/plans").get(transactionControllers.getPlans);
+transactionRoutes.route("/plans").get(protect, transactionControllers.getPlans);
 transactionRoutes.route("/purchase").post(protect, transactionControllers.purchasePlan);
 
 export default transactionRoutes;

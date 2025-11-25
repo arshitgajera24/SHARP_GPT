@@ -44,7 +44,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen}) => {
       <img src={theme === "dark" ? assets.gpt_main_dark : assets.gpt_main_removebg} onClick={() => navigate("/")} alt="" className="w-full max-w-48 cursor-pointer" />
 
       {/* New Chat Button */}
-      <button onClick={() => createNewChat()} className='flex justify-center items-center w-full py-2 mt-10 text-white bg-linear-to-r from-[#A456F7] to-[#3D81F6] text-sm rounded-md cursor-pointer'>
+      <button onClick={() => { createNewChat(); setIsMenuOpen(false); }} className='flex justify-center items-center w-full py-2 mt-10 text-white bg-linear-to-r from-[#A456F7] to-[#3D81F6] text-sm rounded-md cursor-pointer'>
         <span className='mr-2 text-xl'>+</span> New Chat
       </button>
 

@@ -105,7 +105,7 @@ const Sidebar = ({ isMenuOpen, setIsMenuOpen}) => {
         <img src={assets.user_icon} alt="" className='w-7 rounded-full' />
         <p className='flex-1 text-sm dark:text-primary truncate'>{user ? user.name : "Login Your Account"}</p>
         {
-          user && <img onClick={logout} src={assets.logout_icon} className='h-5 cursor-pointer hidden not-dark:invert group-hover:block' alt="" />
+          user && <img onClick={logout} src={assets.logout_icon} className='h-5 cursor-pointer not-dark:invert block' alt="" />
         }
       </div>
 

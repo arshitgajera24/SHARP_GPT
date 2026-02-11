@@ -1,5 +1,5 @@
 import imagekit from "../config/imagekit.js";
-import ai from "../config/gemini.js";
+import openai from "../config/openai.js";
 import { Chat } from "../models/Chat.js";
 import { User } from "../models/User.js";
 import axios from "axios"
@@ -22,12 +22,17 @@ export const textMessageController = async (req, res) => {
             isImage: false
         })
 
-        const response = await ai.models.generateContent({
+        const completion = await openai.chat.completions.create({
             model: "gemini-2.5-flash",
-            contents: prompt,
+            messages: [
+                {
+                    role: "user",
+                    content: prompt,
+                },
+            ],
         });
 
-        const reply = { role: "assistant", content: response.text, timestamp: Date.now(), isImage: false }
+        const reply = { role: "assistant", content: completion.choices[0].message.content, timestamp: Date.now(), isImage: false }
 
         res.json({ success: true, reply })
 

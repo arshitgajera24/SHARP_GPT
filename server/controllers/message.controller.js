@@ -23,7 +23,7 @@ export const textMessageController = async (req, res) => {
         })
 
         const {choices} = await openai.chat.completions.create({
-            model: "gemini-2.5-flash",
+            model: "gemini-3-flash-preview",
             messages: [
                 {
                     role: "user",
@@ -41,7 +41,8 @@ export const textMessageController = async (req, res) => {
         await User.updateOne({_id: userId}, { $inc: {credits: -1}});
 
     } catch (error) {
-        console.log(error.message);
+        console.log("Text Message Error:", error.message);
+        console.log("Full Error:", error?.status, error?.error || error);
         return res.json({ success: false, message: error.message });
     }
 }

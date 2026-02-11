@@ -22,11 +22,6 @@ export const textMessageController = async (req, res) => {
             isImage: false
         })
 
-<<<<<<< HEAD
-        const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
-            contents: prompt,
-=======
         const {choices} = await openai.chat.completions.create({
             model: "gemini-3-flash-preview",
             messages: [
@@ -35,7 +30,6 @@ export const textMessageController = async (req, res) => {
                     content: prompt,
                 },
             ],
->>>>>>> d6973a2d66346cbfb437c9403ad5c540bb5ae600
         });
 
         const reply = { role: "assistant", content: response.text, timestamp: Date.now(), isImage: false }

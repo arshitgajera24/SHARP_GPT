@@ -1,5 +1,5 @@
 import imagekit from "../config/imagekit.js";
-import openai from "../config/openai.js";
+import ai from "../config/gemini.js";
 import { Chat } from "../models/Chat.js";
 import { User } from "../models/User.js";
 import axios from "axios"
@@ -22,17 +22,12 @@ export const textMessageController = async (req, res) => {
             isImage: false
         })
 
-        const {choices} = await openai.chat.completions.create({
-            model: "gemini-2.5-flash",
-            messages: [
-                {
-                    role: "user",
-                    content: prompt,
-                },
-            ],
+        const response = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: prompt,
         });
 
-        const reply = {...choices[0].message, timestamp: Date.now(), isImage: false}
+        const reply = { role: "assistant", content: response.text, timestamp: Date.now(), isImage: false }
 
         res.json({ success: true, reply })
 
@@ -41,7 +36,8 @@ export const textMessageController = async (req, res) => {
         await User.updateOne({_id: userId}, { $inc: {credits: -1}});
 
     } catch (error) {
-        console.log(error.message);
+        console.log("Text Message Error:", error.message);
+        console.log("Full Error:", error?.status, error?.error || error);
         return res.json({ success: false, message: error.message });
     }
 }

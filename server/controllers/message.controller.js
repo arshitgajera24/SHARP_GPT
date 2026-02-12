@@ -23,7 +23,7 @@ export const textMessageController = async (req, res) => {
         })
 
         const response = await ai.models.generateContent({
-            model: "gemini-3-pro-preview",
+            model: "gemini-3-flash-preview",
             contents: prompt,
         });
 

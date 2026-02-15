@@ -17,35 +17,46 @@ export const stripeWebhooks = async (request, response) => {
 
     try {
         switch (event.type) {
-            case "payment_intent.succeeded":{
-                const paymentIntent = event.data.object;
-                const sessionList = await stripe.checkout.sessions.list({
-                    payment_intent: paymentIntent.id,
-                })
+            case 'checkout.session.completed': {
+                const session = event.data.object;
+                const { transactionId, appId } = session.metadata || {};
 
-                const session = sessionList.data[0];
-                const {transactionId, appId} = session.metadata;
+                if (appId !== 'sharpgpt') {
+                    return response.json({ received: true, message: 'Ignored Event: Invalid App' });
+                }
 
-                if(appId === "sharpgpt")
-                {
+                if (!transactionId) {
+                     console.error('Missing transactionId in session metadata');
+                     return response.status(400).send('Webhook Error: Missing transactionId');
+                }
+
+                try {
                     const transaction = await Transaction.findOne({
                         _id: transactionId,
                         isPaid: false,
-                    })
+                    });
 
-                    await User.updateOne({_id: transaction.userId}, {$inc: {credits: transaction.credits}});
+                    if (!transaction) {
+                        console.warn(`Transaction not found or already paid: ${transactionId}`);
+                        return response.json({ received: true, message: 'Transaction already processed or invalid' });
+                    }
+
+                    await User.updateOne({ _id: transaction.userId }, { $inc: { credits: transaction.credits } });
+                    
                     transaction.isPaid = true;
                     await transaction.save();
+                    
+                    console.log(`Credits added for user ${transaction.userId} from transaction ${transactionId}`);
+
+                } catch (dbError) {
+                    console.error('Database update error:', dbError);
+                    return response.status(500).send('Internal Server Error during credit update');
                 }
-                else
-                {
-                    return response.json({ received: true, message: "Ignored Event: Invalid App"})
-                }
-            }    
-            break;
-        
+                break;
+            }
+
             default:
-                console.log("Unhandled Event type: ", event.type)
+                console.log('Unhandled Event type: ', event.type);
                 break;
         }
 

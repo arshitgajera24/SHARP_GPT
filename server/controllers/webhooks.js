@@ -7,11 +7,18 @@ export const stripeWebhooks = async (request, response) => {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
     const sig = request.headers["stripe-signature"];
 
+    console.log("Webhook received");
+    console.log("Signature:", sig ? "Present" : "Missing");
+    console.log("Body Type:", typeof request.body);
+    console.log("Body Is Buffer:", Buffer.isBuffer(request.body));
+
     let event;
 
     try {
         event = stripe.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+        console.log("Event constructed successfully:", event.type);
     } catch (error) {
+        console.error("Webhook signature verification failed:", error.message);
         return response.status(400).send(`Webhook error : ${error.message}`);
     }
 

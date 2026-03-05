@@ -37,7 +37,7 @@ const App = () => {
         </div>
       </div>
       ) : (
-        <div className='bg-linear-to-b from-[#242124] to-[#000000] flex items-center justify-center h-screen w-screen'>
+        <div className='bg-gradient-to-b from-[#1a0a2e] to-[#0d0416] flex items-center justify-center h-screen w-screen overflow-hidden'>
           <Login />
         </div>
       )}

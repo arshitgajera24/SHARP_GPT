@@ -13,8 +13,8 @@ export const createChat = async (req, res) => {
         await Chat.create(chatData);
         res.json({ success: true, message: "Chat Created Successfully"});
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Chat Error:", error.message);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }
 
@@ -24,8 +24,8 @@ export const getChats = async (req, res) => {
         const chats = await Chat.find({userId}).sort({updatedAt: -1});
         res.json({ success: true, chats });
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Chat Error:", error.message);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }
 
@@ -36,8 +36,8 @@ export const deleteChat = async (req, res) => {
         await Chat.deleteOne({_id: chatId, userId});
         res.json({ success: true, message: "Chat Deleted Successfully" });
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Chat Error:", error.message);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }
 

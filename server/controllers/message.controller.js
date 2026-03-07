@@ -32,8 +32,15 @@ export const textMessageController = async (req, res) => {
             }));
 
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-2.0-flash",
             contents: history,
+            config: {
+                systemInstruction: `You are an AI assistant. Follow these rules strictly:
+
+- For normal questions (coding, math, science, general knowledge, etc.), just answer the question directly. Do NOT mention your name, your creator, or any branding. Respond like a helpful, knowledgeable assistant.
+- ONLY when the user explicitly asks identity-related questions like "Who are you?", "What is your name?", "Who created you?", "Who made you?", or "Who built you?" — THEN respond that your name is SHARP GPT, you were created by Arshit Gajera, and you are powered by Google's Gemini AI model.
+- Never volunteer identity information unless directly asked.`
+            }
         });
 
         const reply = { role: "assistant", content: response.text, timestamp: Date.now(), isImage: false }
@@ -47,7 +54,7 @@ export const textMessageController = async (req, res) => {
     } catch (error) {
         console.log("Text Message Error:", error.message);
         console.log("Full Error:", error?.status, error?.error || error);
-        return res.json({ success: false, message: error.message });
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }
 
@@ -81,10 +88,18 @@ export const imageMessageController = async (req, res) => {
 
         //^ Ask Gemini to create an optimized image prompt based on full context
         const promptBuilder = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-2.0-flash",
             contents: textHistory,
             config: {
-                systemInstruction: "You are an image prompt builder. Based on the conversation history and the latest user message, create a single, detailed, descriptive image generation prompt. Output ONLY the prompt text, nothing else — no explanations, no formatting, no quotes, no prefixes. If the user is referring to a previous image or wants modifications to a previously described image, incorporate all the relevant context into one complete, standalone image description prompt that can generate the desired image from scratch."
+                systemInstruction: `You are an image prompt builder. Your job is to create a single, detailed image generation prompt based on the user's latest message.
+
+RULES:
+1. Focus PRIMARILY on the user's latest message — that is the main subject.
+2. Only use previous messages as context if the latest message is clearly a modification, correction, or continuation of the SAME topic/subject (e.g., "make it blue", "change the background", "add rain to it").
+3. If the latest message is about a DIFFERENT topic than previous messages, IGNORE all previous messages entirely and treat it as a fresh, standalone prompt.
+4. NEVER combine or merge subjects from different unrelated prompts (e.g., if one prompt was about "Ironman" and the next about "Thor", do NOT create an image with both).
+5. Output ONLY the image description prompt — no explanations, no formatting, no quotes, no prefixes.
+6. Make the prompt vivid, detailed, and descriptive for best image generation results.`
             }
         });
 
@@ -126,7 +141,8 @@ export const imageMessageController = async (req, res) => {
         await User.updateOne({_id: userId}, { $inc: {credits: -2}});
 
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Image Message Error:", error.message);
+        console.log("Full Error:", error?.status, error?.error || error);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }

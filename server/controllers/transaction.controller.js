@@ -30,8 +30,8 @@ export const getPlans = async (req, res) => {
     try {
         res.json({ success: true, plans });
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Transaction Error:", error.message);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }
 
@@ -80,7 +80,7 @@ export const purchasePlan = async (req, res) => {
         res.json({ success: true, url: session.url });
 
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Transaction Error:", error.message);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }

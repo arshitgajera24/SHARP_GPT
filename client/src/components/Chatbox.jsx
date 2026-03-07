@@ -47,7 +47,8 @@ const Chatbox = () => {
         setPrompt(promptCopy);
       }
     } catch (error) {
-      toast.error(error.message);
+      console.error("Message Error:", error);
+      toast.error("Something went wrong, please try again.");
     } finally {
       setPrompt("")
       setLoading(false);

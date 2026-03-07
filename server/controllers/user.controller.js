@@ -24,8 +24,8 @@ export const registerUser = async (req, res) => {
 
         res.json({success: true, token});
     } catch (error) {
-        console.log(error.message)
-        return res.json({success: false, message: error.message})
+        console.log("Register Error:", error.message)
+        return res.json({success: false, message: "Something went wrong, please try again."})
     }
 }
 
@@ -45,8 +45,8 @@ export const loginUser = async (req, res) => {
 
         return res.json({ success: false, message: "Invalid Credentials" });
     } catch (error) {
-        console.log(error.message)
-        return res.json({success: false, message: error.message})
+        console.log("Login Error:", error.message)
+        return res.json({success: false, message: "Something went wrong, please try again."})
     }
 }
 
@@ -55,8 +55,8 @@ export const getUser = async (req, res) => {
         const user = req.user;
         return res.json({success: true, user});
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Get User Error:", error.message);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }
 
@@ -81,8 +81,8 @@ export const getPublishedImages = async (req, res) => {
 
         res.json({ success: true, images: publishedImageMessages.reverse() });
     } catch (error) {
-        console.log(error.message);
-        return res.json({ success: false, message: error.message });
+        console.log("Published Images Error:", error.message);
+        return res.json({ success: false, message: "Something went wrong, please try again." });
     }
 }
 

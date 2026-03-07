@@ -22,9 +22,18 @@ export const textMessageController = async (req, res) => {
             isImage: false
         })
 
+        //^ Build conversation history for Gemini (text-only, last 30 messages)
+        const history = chat.messages
+            .filter(msg => !msg.isImage)
+            .slice(-30)
+            .map(msg => ({
+                role: msg.role === "assistant" ? "model" : "user",
+                parts: [{ text: msg.content }]
+            }));
+
         const response = await ai.models.generateContent({
             model: "gemini-3-flash-preview",
-            contents: prompt,
+            contents: history,
         });
 
         const reply = { role: "assistant", content: response.text, timestamp: Date.now(), isImage: false }
@@ -61,8 +70,28 @@ export const imageMessageController = async (req, res) => {
             isImage: false,
         });
 
-        //~ Encode the Prompt
-        const encodedPrompt = encodeURIComponent(prompt);
+        //^ Build conversation context for Gemini prompt builder (text-only, last 20)
+        const textHistory = chat.messages
+            .filter(msg => !msg.isImage)
+            .slice(-20)
+            .map(msg => ({
+                role: msg.role === "assistant" ? "model" : "user",
+                parts: [{ text: msg.content }]
+            }));
+
+        //^ Ask Gemini to create an optimized image prompt based on full context
+        const promptBuilder = await ai.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: textHistory,
+            config: {
+                systemInstruction: "You are an image prompt builder. Based on the conversation history and the latest user message, create a single, detailed, descriptive image generation prompt. Output ONLY the prompt text, nothing else — no explanations, no formatting, no quotes, no prefixes. If the user is referring to a previous image or wants modifications to a previously described image, incorporate all the relevant context into one complete, standalone image description prompt that can generate the desired image from scratch."
+            }
+        });
+
+        const enhancedPrompt = promptBuilder.text.trim();
+
+        //~ Encode the enhanced Prompt
+        const encodedPrompt = encodeURIComponent(enhancedPrompt);
 
         //~ Construct Imagekit AI Generation URL
         const generatedImageUrl = `${process.env.IMAGEKIT_URL_ENDPOINT}/ik-genimg-prompt-${encodedPrompt}/sharpgpt/${Date.now()}.png?tr=w-800,h-800`;

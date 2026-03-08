@@ -19,7 +19,7 @@
     "express": "^5.1.0",
     "imagekit": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^9.0.0",
+    "mongoose": "^9.2.4",
     "openai": "^6.9.1",
     "stripe": "^20.0.0",
     "svix": "^1.81.0"

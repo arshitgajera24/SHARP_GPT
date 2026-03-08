@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    container_name: Sharp-GPT
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4

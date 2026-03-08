@@ -1,6 +1,0 @@
-services:
-  img:
-    build: .
-    container_name: Sharp-GPT
-    ports:
-      - 5000:5000

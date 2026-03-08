@@ -8,6 +8,8 @@ import messageRoutes from "./routes/message.routes.js";
 import transactionRoutes from "./routes/transaction.routes.js";
 import { stripeWebhooks } from "./controllers/webhooks.js";
 dotenv.config();
+import dns from "dns";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const app = express();
 

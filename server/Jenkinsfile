@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull Code') {
+            steps {
+                sshagent(['ec2-ssh-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@3.226.254.96 "
+                            git config --global --add safe.directory /home/ubuntu/SHARP_GPT &&
+                            cd /home/ubuntu/SHARP_GPT &&
+                            git pull origin main
+                        "
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent(['ec2-ssh-key']) {
+                    sh '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@3.226.254.96 "
+                            cd /home/ubuntu/SHARP_GPT/server &&
+                            sudo docker compose down &&
+                            sudo docker compose up --build -d &&
+                            sudo docker image prune -f
+                        "
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Deployment failed!'
+        }
+    }
+}

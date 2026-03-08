@@ -32,7 +32,7 @@ export const textMessageController = async (req, res) => {
             }));
 
         const response = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash-lite",
             contents: history,
             config: {
                 systemInstruction: `You are an AI assistant. Follow these rules strictly:
@@ -88,7 +88,7 @@ export const imageMessageController = async (req, res) => {
 
         //^ Ask Gemini to create an optimized image prompt based on full context
         const promptBuilder = await ai.models.generateContent({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash-lite",
             contents: textHistory,
             config: {
                 systemInstruction: `You are an image prompt builder. Your job is to create a single, detailed image generation prompt based on the user's latest message.

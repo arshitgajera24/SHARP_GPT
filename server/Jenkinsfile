@@ -6,7 +6,7 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@3.226.254.96 "
+                        ssh -o StrictHostKeyChecking=no ubuntu@44.197.234.169 "
                             git config --global --add safe.directory /home/ubuntu/SHARP_GPT &&
                             cd /home/ubuntu/SHARP_GPT &&
                             git pull origin main
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
-                        ssh -o StrictHostKeyChecking=no ubuntu@3.226.254.96 "
+                        ssh -o StrictHostKeyChecking=no ubuntu@44.197.234.169 "
                             cd /home/ubuntu/SHARP_GPT/server &&
                             sudo docker compose down &&
                             sudo docker compose up --build -d &&

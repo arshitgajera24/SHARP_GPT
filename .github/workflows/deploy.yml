@@ -20,8 +20,17 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            # Fix 1: Git safe directory
+            git config --global --add safe.directory /home/ubuntu/SHARP_GPT
+
+            # Fix 2: Pull latest code
             cd /home/ubuntu/SHARP_GPT
             git pull origin main
-            docker compose down
-            docker compose up --build -d
-            docker image prune -f
+
+            # Fix 3: Go to server folder where docker-compose.yml is
+            cd /home/ubuntu/SHARP_GPT/server
+
+            # Fix 4: Run docker with sudo
+            sudo docker compose down
+            sudo docker compose up --build -d
+            sudo docker image prune -f

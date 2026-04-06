@@ -131,16 +131,8 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Forgot Password */}
-        {state === "login" && (
-          <div className="text-left mb-4 pl-1">
-            <button type="button" className="text-xs text-purple-600 hover:text-purple-800 transition-colors duration-200 font-medium">
-              Forgot password?
-            </button>
-          </div>
-        )}
+         {state !== "login" && <div className="mb-4" />}
 
-        {state !== "login" && <div className="mb-4" />}
 
         {/* Submit Button */}
         <button

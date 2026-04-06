@@ -12,23 +12,17 @@
     --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     --animate-login-spin: login-spin 0.6s linear infinite;
     --animate-slide-down: slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    --animate-pulse-purple: pulse-purple 3s ease-in-out infinite;
+    --animate-travel: travel 15s linear infinite;
+    --animate-shimmer: shimmer 2s linear infinite;
 }
 
 ::-webkit-scrollbar {
     display: none;
 }
 
-
 .reset-tw :not(pre):not(code) {
     all: revert;
-}
-
-.loader div:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.loader div:nth-child(3) {
-    animation-delay: 0.4s;
 }
 
 @keyframes fade-up {
@@ -45,3 +39,57 @@
     to { opacity: 1; transform: translateY(0); max-height: 80px; }
 }
 
+@keyframes pulse-purple {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+@keyframes aurora-shift {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-5%, 5%) scale(1.1); }
+    100% { transform: translate(5%, -5%) scale(1); }
+}
+
+@keyframes travel {
+    0% { transform: translate(0, 0); opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate(400px, -400px); opacity: 0; }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+@keyframes border-glow {
+  0%, 100% { border-color: rgba(168, 85, 247, 0.4); box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+  50% { border-color: rgba(236, 72, 153, 0.8); box-shadow: 0 0 15px rgba(236, 72, 153, 0.4); }
+}
+
+.animate-border-glow {
+  animation: border-glow 2s infinite ease-in-out;
+}
+
+.shimmer-loading {
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+.pulse-glow {
+    animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(164, 86, 247, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(164, 86, 247, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(164, 86, 247, 0); }
+}
+
+.glass-dark {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}

@@ -47,11 +47,20 @@ export const AppContextProvider = ({children}) => {
     const createNewChat = async () => {
         try {
             if(!user) return toast("Login to Create a New Chat");
-            navigate("/");
-
-            const {data} = await axios.get("/api/chat/create", config)
-            console.log(data)
-            await fetchUsersChat();
+            
+            // Show optimistic loader
+            const creatingToast = toast.loading("Launching new workspace...");
+            
+            const {data} = await axios.get("/api/chat/create", config);
+            
+            if (data.success) {
+                // Instantly navigate and refresh history
+                navigate("/");
+                await fetchUsersChat();
+                toast.success("New chat initialized.", { id: creatingToast });
+            } else {
+                toast.error(data.message, { id: creatingToast });
+            }
         } catch (error) {
             toast.error(error.message);
         }

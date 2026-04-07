@@ -117,10 +117,10 @@ const Chatbox = () => {
               alt="SHARP GPT"
             />
 
-            <h2 className="text-3xl md:text-5xl font-bold bg-linear-to-r from-white via-white/80 to-white/40 bg-clip-text text-transparent pb-2 mb-4 text-center tracking-tight dark:from-white not-dark:from-black not-dark:to-black/30">
+            <h2 className="text-3xl md:text-5xl font-bold bg-linear-to-r from-white via-white/80 to-white/40 bg-clip-text text-transparent pb-2 mb-4 text-center tracking-tight dark:from-white not-dark:from-black not-dark:via-slate-600 not-dark:to-slate-400">
               Design Your Intelligence.
             </h2>
-            <p className="text-white/20 dark:text-white/20 not-dark:text-black/20 text-sm mb-12 text-center max-w-sm font-medium">
+            <p className="text-white/20 dark:text-white/20 not-dark:text-slate-500 text-sm mb-12 text-center max-w-sm font-medium">
               Select a mode and begin your creative journey with SHARP GPT.
             </p>
 
